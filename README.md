@@ -43,7 +43,7 @@ Loading Data
 ---
 
 
-The data file is not with this code. So first download the CSV of species into this folder or somewhere that you can access from R
+The data file is not with this code. So first download the CSV of species into this folder or somewhere that you can access from R.   
 
 ```
 source('traitr.R')  # I thought this was clever, but there packages named 'traits' and 'traitr' already exist
@@ -54,14 +54,27 @@ For now We are only looking at those that are not "Least Concern"
 
 ```
 # this requires dplyr, which is loaded if you 'source' the R file 
-species_data <- dplyr::filter(species_data, category!="LC" ) # filter out the LC species
+species_data <- dplyr::filter(species_data, category!="LC" ) # filter out the Least Concern species
 ```
 
 
 Now download the trait data from IUCN. This will take a while (an hour?).  
 
+Quick test of download: 
 ```
+
+# to test with just a few species, try this ... 
+threat_data <- threats_by_species(species_data$taxonid[1:10]) 
+```
+
+Download all except LC species: 
+
+```
+# this will take a long time! Each species_id is displayed while it downloads, 
+# to cancel use ctrl+c
+# nothing is saved if you cancel before it completes. 
 threat_data <- threats_by_species(species_data$taxonid) 
+
 # save this for later so you don't have to download again
 save(threat_data, file='threats_montane_birds.rdata')
 ```
@@ -96,7 +109,7 @@ For example, Body mass:
 # combine body mass and threats
 trait_column = 'Body_mass_value'
 
-t.df <- traits_and_threats(species_data, threats_data, trait_column )
+t.df <- traits_and_threats(species_data, threat_data, trait_column )
 
 # simple visualization of the resulting data
 boxplot(Body_mass_value ~ threatcode, data=t.df, xlab="Threat Code", ylab="Body Mass")
@@ -104,9 +117,13 @@ boxplot(Body_mass_value ~ threatcode, data=t.df, xlab="Threat Code", ylab="Body 
 # calculate basic stats 
 t<- trait_summary_by_threat(species_data, threats_data, trait_column )
 summary(t)
+# fancier bar plot (looks nice but is not particularly meaningful)
+
+trait_summary_barplot(t)
+
 ```    
 
-These are too simplistic to be useful but you get the idea. 
+These are too simplistic to be useful but you get the idea to build on. 
 
 Notes
 ---
