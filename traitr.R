@@ -2,6 +2,7 @@
 # example R
 library(rredlist)
 library(dplyr)
+library(ggplot2)
 
 set_token <- function(iucn_token) {
     
@@ -13,6 +14,7 @@ traits_of_interest <- c('Body_mass_value', 'range_size', 'habitat_specialization
 
 ####### FUNCTIONS ##########
 get_threat<- function(taxonid, verbose=TRUE){
+    # most basic version of IUCN threat download. 
     # get a single threat data structure for one taxonid
     # taxon id must be as in the IUCN Database, and must be a chactacter/string
     # using this function to explicitly use ID  argument instead of the default argument which is name
@@ -33,10 +35,9 @@ get_threat_codes_per_id <- function(taxonid, verbose=TRUE){
       # creates a small data frame from threat data structure 
       # column 1 = taxonid  : all rows have the same value (the taxon id)
       # column 2 = threatcode : one row for each IUCN threat code, as read from the redlist api
-     # this function is called by threats_by_id function  which merges all the small data frames together
-    
-        
-      threat <- get_threat(taxonid, verbose = verbose)
+     # this function is called for each species by threats_by_species function
+  
+     threat <- get_threat(taxonid, verbose = verbose)
       if(length(threat$result) > 0)
         {df<- data.frame(taxonid = as.integer(threat$id), threatcode = threat$result$code)}
       else
@@ -153,7 +154,7 @@ test_threats_by_species <- function(datafile="IUCN_trait_montane_birds.csv"){
     t<- trait_summary_by_threat(species_data, threats_data, trait_column )
     summary(t)
     
-    # simple bar plot
+    # simple bar plota
     trait_summary_barplot(trait_by_threat)
     
     # threats_and_bodymass <- species_data %>% dplyr::select(c('taxonid','Body_mass_value')) %>% inner_join(df)
