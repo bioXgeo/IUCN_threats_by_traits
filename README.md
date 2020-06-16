@@ -37,7 +37,24 @@ packrat::init(infer.dependencies = FALSE,
 pkgs = c('rredlist','dplyr', 'tidyr', 'ggplot2')
 install.packages(pkgs)
 
+
 ```
+
+API Key
+---
+
+
+Using ICUN api requires a key, and the documentation for the rredlist pacakge disusses this.   You should keep this key private not put this key into any code that goes into github.   
+
+This code has a function you can riun to set the key before you can use the other functions
+
+If your key is ABC123, then run this in your R session
+
+```
+set_token <- function("ABC123) 
+```
+
+which will set the key is such a way that all the other rredlist functions can find it (it puts it into an OS Environment variables called IUCN_REDLIST_KEY that the rredlist package will look for).   See https://cran.r-project.org/web/packages/rredlist/rredlist.pdf for details.  
 
 Loading Data
 ---
