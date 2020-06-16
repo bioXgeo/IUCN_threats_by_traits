@@ -51,7 +51,8 @@ This code has a function you can riun to set the key before you can use the othe
 If your key is ABC123, then run this in your R session
 
 ```
-set_token <- function("ABC123) 
+mykey <- "ABC123"
+set_token(mykey)
 ```
 
 which will set the key is such a way that all the other rredlist functions can find it (it puts it into an OS Environment variables called IUCN_REDLIST_KEY that the rredlist package will look for).   See https://cran.r-project.org/web/packages/rredlist/rredlist.pdf for details.  
