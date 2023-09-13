@@ -1,48 +1,28 @@
 Threats by Traits Project
 ----
 
-DRAFT README
-
-Code in R to pull IUCN redlist threats by species
-
-
-Packages use: 
-
-rredlist
-jqr
-
-optional: googledrive if data is kept on google drive
-
-Example code that pulls redlist... 
-
-```
-library("rredlist")
-library("jqr")
-rl_search_('Fratercula arctica') %>% dot()
-
-```
+Simple R script to pull IUCN redlist threats by species for use by students in MSU SpaCE lab https://www.communityecologylab.com
 
 Installing
 ---
 
-To work with the code here, use the following to install what you need, but just for this project in this folder.  Copy and paste this into Rstudio
+Install the packages above in your main R library, or consider using [renv](https://rstudio.github.io/renv/)
 
-```
-install.packages('packrat')
-packrat::init(infer.dependencies = FALSE,
-              options = list(
-                vcs.ignore.lib = TRUE,
-                vcs.ignore.src = TRUE
-              ))
+Packages used: 
+ - [rredlist](https://cran.r-project.org/web/packages/rredlist/index.html
+ - [jqr](https://cran.r-project.org/web/packages/jqr/)
+ - dplyr and ggplot2
+ 
+optional package: 
+ - [googledrive](https://cran.r-project.org/web/packages/googledrive/) (if data is kept on google drive)
+
+```R
 pkgs = c('rredlist','dplyr', 'tidyr', 'ggplot2')
 install.packages(pkgs)
-
-
 ```
 
 API Key
 ---
-
 
 Using ICUN api requires a key, and the documentation for the rredlist pacakge disusses this.   You should keep this key private not put this key into any code that goes into github.   
 
@@ -57,21 +37,32 @@ set_token(mykey)
 
 which will set the key is such a way that all the other rredlist functions can find it (it puts it into an OS Environment variables called IUCN_REDLIST_KEY that the rredlist package will look for).   See https://cran.r-project.org/web/packages/rredlist/rredlist.pdf for details.  
 
-Loading Data
+
+Usage
 ---
 
+### step 1. Loading Data
 
-The data file is not with this code. So first download the CSV of species into this folder or somewhere that you can access from R.   
+The data file is not included with this code as IUCN updates it routinely.  You must first download the CSV of species into this folder or somewhere that you can access from R.    For example download and save to  "iucnspecies.csv."  Downloading data from IUCN requires an account, but you'll need the account to use the rredlist package.    
+
 
 ```
-source('traitr.R')  # I thought this was clever, but there packages named 'traits' and 'traitr' already exist
+source('traitr.R')
+
+# set up your IUCN key using rredlist function set_token
+
+mykey <- "ABC123"
+set_token(mykey)
+
 species_data <- read.csv("IUCN_trait_montane_birds.csv")
+species = 'Fratercula arctica' 
+rl_search_(species) %>% dot()
+
 ```
 
-For now We are only looking at those that are not "Least Concern"
+For an example analysis, consider only using those that are not "Least Concern."  this requires dplyr, which is loaded if you 'source' the R file 
 
 ```
-# this requires dplyr, which is loaded if you 'source' the R file 
 species_data <- dplyr::filter(species_data, category!="LC" ) # filter out the Least Concern species
 ```
 
